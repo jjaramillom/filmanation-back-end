@@ -1,3 +1,3 @@
-import { movie, movies } from './Movie';
+import { movie, movieSearch, movieDiscover } from './Movie';
 
-export default { movie, movies };
+export default { movie, movieSearch, movieDiscover };
