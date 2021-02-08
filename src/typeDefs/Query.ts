@@ -8,7 +8,7 @@ export default gql`
       sort_by: SortBy
       sort_order: SortOrder
       year: String
-      genres: [Genre]
+      genres: [Genre!]
       offset: Int
       limit: Int
     ): MovieList!

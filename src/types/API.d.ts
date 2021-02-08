@@ -1,20 +1,3 @@
-type Movie = {
-  popularity: number;
-  vote_count: 1712;
-  video: boolean;
-  poster_path: string;
-  id: number;
-  adult: boolean;
-  backdrop_path: string;
-  original_language: string;
-  original_title: string;
-  genre_ids: number[];
-  genre_names: string[];
-  title: string;
-  vote_average: number;
-  overview: string;
-};
-
 /**
  * Types for discover endpoint in Movie api_key
  */

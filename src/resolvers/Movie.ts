@@ -1,49 +1,44 @@
-// import {error} from 'apollo-server-express'
+import { QueryResolvers } from '../generated/graphql';
+import { Context } from '../createApolloServer';
 
-import { MovieExplore, MovieSearch } from '../dataSources/movies';
-
-type MovieArgs = {
-  id: string;
+export const movie: QueryResolvers<Context>['movie'] = (
+  _,
+  { id },
+  { dataSources: { movieApi } }
+) => {
+  return {
+    id: '132',
+    title: 'tenet',
+    genre_ids: [6],
+    adult: false,
+    genre_names: [],
+    original_title: '',
+    popularity: 3,
+    poster_path: '',
+    vote_average: 4,
+    vote_count: 10,
+    release_date: '',
+  };
 };
 
-type searchArgs = {
-  query: string;
-  offset: number;
-  limit: number;
+export const movieSearch: QueryResolvers<Context>['movieSearch'] = async (
+  _,
+  { query, offset, limit },
+  { dataSources: { movieApi } }
+) => {
+  return await movieApi.searchMovies(query, offset ?? undefined, limit ?? undefined);
 };
 
-type discoverArgs = {
-  sort_by: SortBy;
-  sort_order: SortOrder;
-  year: number;
-  genres: eMovieGenre[];
-  offset: number;
-  limit: number;
-};
-
-export const movie = (_: any, { id }: MovieArgs): Partial<Movie> => {
-  return { id: 132, title: 'tenet', genre_ids: [eMovieGenre.ACTION] };
-};
-
-export const movieSearch = async (
-  _: any,
-  { query, offset, limit }: searchArgs
-): Promise<{ movies: Movie[]; moreMovies: boolean }> => {
-  const movieDataSource = new MovieSearch();
-  const { movies, moreMovies } = await movieDataSource.getMovies(query, offset, limit);
-  return { movies, moreMovies };
-};
-
-export const movieDiscover = async (
-  _: any,
-  params: discoverArgs
-): Promise<{ movies: Movie[]; moreMovies: boolean }> => {
+export const movieDiscover: QueryResolvers<Context>['movieDiscover'] = async (
+  _,
+  params,
+  { dataSources: { movieApi } }
+) => {
   const { offset, limit, ...options } = params;
-  const movieDataSource = new MovieExplore();
-  const { movies, moreMovies } = await movieDataSource.getMovies(
-    options,
-    params.offset,
-    params.limit
+  const { movies, moreMovies } = await movieApi.exploreMovies(
+    { genres: [] },
+    params.offset ?? undefined,
+    params.limit ?? undefined
   );
   return { movies, moreMovies };
 };
