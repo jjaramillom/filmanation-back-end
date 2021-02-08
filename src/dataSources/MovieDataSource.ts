@@ -1,5 +1,5 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
-import { Genre } from '../generated/graphql';
+import { Genre, SortBy, SortOrder, } from '../generated/graphql';
 import { movies_per_page, api_key, base_url } from '../shared/movieDB';
 
 export type Movie = {
@@ -70,8 +70,8 @@ export default class MovieDataSource extends RESTDataSource {
    */
   public async exploreMovies(
     options: DiscoverOptions = {
-      sort_by: 'popularity',
-      sort_order: 'desc',
+      sort_by: SortBy.Popularity,
+      sort_order: SortOrder.Desc,
       genres: [],
       year: 2020,
     },

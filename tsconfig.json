@@ -7,7 +7,6 @@
     "outDir": "./build",
     "rootDir": "./",
     "strict": true,
-    "types": ["./src/types/API"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
