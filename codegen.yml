@@ -9,5 +9,5 @@ generates:
       - 'typescript'
       - 'typescript-resolvers'
     config:
-      avoidOptionals: true
+      noSchemaStitching: true
 

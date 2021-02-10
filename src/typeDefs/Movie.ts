@@ -12,11 +12,26 @@ export default gql`
     poster_path: String
     vote_average: Float
     release_date: String
+    overview: String
+    cast: [Cast!]
+  }
+
+  type CastResult {
+    items: [Cast!]
   }
 
   type MovieList {
     movies: [Movie!]!
     moreMovies: Boolean!
+  }
+
+  type Cast {
+    name: String!
+    adult: Boolean
+    gender: Int
+    popularity: Int
+    profile_path: String
+    character: String
   }
 
   enum SortBy {

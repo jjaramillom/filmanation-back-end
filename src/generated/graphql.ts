@@ -21,6 +21,21 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+export type Cast = {
+  __typename?: 'Cast';
+  name: Scalars['String'];
+  adult?: Maybe<Scalars['Boolean']>;
+  gender?: Maybe<Scalars['Int']>;
+  popularity?: Maybe<Scalars['Int']>;
+  profile_path?: Maybe<Scalars['String']>;
+  character?: Maybe<Scalars['String']>;
+};
+
+export type CastResult = {
+  __typename?: 'CastResult';
+  items?: Maybe<Array<Cast>>;
+};
+
 export enum Genre {
   Action = 'ACTION',
   Adventure = 'ADVENTURE',
@@ -49,12 +64,14 @@ export type Movie = {
   title: Scalars['String'];
   genre_ids: Array<Scalars['Int']>;
   genre_names: Array<Genre>;
-  original_title: Maybe<Scalars['String']>;
-  popularity: Maybe<Scalars['Float']>;
-  vote_count: Maybe<Scalars['Int']>;
-  poster_path: Maybe<Scalars['String']>;
-  vote_average: Maybe<Scalars['Float']>;
-  release_date: Maybe<Scalars['String']>;
+  original_title?: Maybe<Scalars['String']>;
+  popularity?: Maybe<Scalars['Float']>;
+  vote_count?: Maybe<Scalars['Int']>;
+  poster_path?: Maybe<Scalars['String']>;
+  vote_average?: Maybe<Scalars['Float']>;
+  release_date?: Maybe<Scalars['String']>;
+  overview?: Maybe<Scalars['String']>;
+  cast?: Maybe<Array<Cast>>;
 };
 
 export type MovieList = {
@@ -78,18 +95,18 @@ export type QueryMovieArgs = {
 
 export type QueryMovieSearchArgs = {
   query: Scalars['String'];
-  offset: Maybe<Scalars['Int']>;
-  limit: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
 export type QueryMovieDiscoverArgs = {
-  sort_by: Maybe<SortBy>;
-  sort_order: Maybe<SortOrder>;
-  year: Maybe<Scalars['String']>;
-  genres: Maybe<Array<Maybe<Genre>>>;
-  offset: Maybe<Scalars['Int']>;
-  limit: Maybe<Scalars['Int']>;
+  sort_by?: Maybe<SortBy>;
+  sort_order?: Maybe<SortOrder>;
+  year?: Maybe<Scalars['String']>;
+  genres?: Maybe<Array<Genre>>;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 export enum SortBy {
@@ -111,20 +128,7 @@ export enum SortOrder {
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-
-export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  fragment: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-
-export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  selectionSet: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-export type StitchingResolver<TResult, TParent, TContext, TArgs> = LegacyStitchingResolver<TResult, TParent, TContext, TArgs> | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
-  | ResolverFn<TResult, TParent, TContext, TArgs>
-  | StitchingResolver<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -192,10 +196,12 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Genre: Genre;
   Float: ResolverTypeWrapper<Scalars['Float']>;
-  MovieList: ResolverTypeWrapper<MovieList>;
+  Cast: ResolverTypeWrapper<Cast>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  MovieList: ResolverTypeWrapper<MovieList>;
   SortBy: SortBy;
   SortOrder: SortOrder;
+  CastResult: ResolverTypeWrapper<CastResult>;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
 };
@@ -208,40 +214,59 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Float: Scalars['Float'];
-  MovieList: MovieList;
+  Cast: Cast;
   Boolean: Scalars['Boolean'];
+  MovieList: MovieList;
+  CastResult: CastResult;
   Upload: Scalars['Upload'];
 };
 
-export type CacheControlDirectiveArgs = {   maxAge: Maybe<Scalars['Int']>;
-  scope: Maybe<CacheControlScope>; };
+export type CacheControlDirectiveArgs = {   maxAge?: Maybe<Scalars['Int']>;
+  scope?: Maybe<CacheControlScope>; };
 
 export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = CacheControlDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
+export type CastResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cast'] = ResolversParentTypes['Cast']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  adult?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  gender?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  popularity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  profile_path?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  character?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CastResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CastResult'] = ResolversParentTypes['CastResult']> = {
+  items?: Resolver<Maybe<Array<ResolversTypes['Cast']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MovieResolvers<ContextType = any, ParentType extends ResolversParentTypes['Movie'] = ResolversParentTypes['Movie']> = {
-  id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  title: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  genre_ids: Resolver<Array<ResolversTypes['Int']>, ParentType, ContextType>;
-  genre_names: Resolver<Array<ResolversTypes['Genre']>, ParentType, ContextType>;
-  original_title: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  popularity: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  vote_count: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  poster_path: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  vote_average: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  release_date: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  genre_ids?: Resolver<Array<ResolversTypes['Int']>, ParentType, ContextType>;
+  genre_names?: Resolver<Array<ResolversTypes['Genre']>, ParentType, ContextType>;
+  original_title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  popularity?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  vote_count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  poster_path?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  vote_average?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  release_date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  overview?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  cast?: Resolver<Maybe<Array<ResolversTypes['Cast']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MovieListResolvers<ContextType = any, ParentType extends ResolversParentTypes['MovieList'] = ResolversParentTypes['MovieList']> = {
-  movies: Resolver<Array<ResolversTypes['Movie']>, ParentType, ContextType>;
-  moreMovies: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  movies?: Resolver<Array<ResolversTypes['Movie']>, ParentType, ContextType>;
+  moreMovies?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  movie: Resolver<ResolversTypes['Movie'], ParentType, ContextType, RequireFields<QueryMovieArgs, 'id'>>;
-  movieSearch: Resolver<ResolversTypes['MovieList'], ParentType, ContextType, RequireFields<QueryMovieSearchArgs, 'query'>>;
-  movieDiscover: Resolver<ResolversTypes['MovieList'], ParentType, ContextType, RequireFields<QueryMovieDiscoverArgs, never>>;
+  movie?: Resolver<ResolversTypes['Movie'], ParentType, ContextType, RequireFields<QueryMovieArgs, 'id'>>;
+  movieSearch?: Resolver<ResolversTypes['MovieList'], ParentType, ContextType, RequireFields<QueryMovieSearchArgs, 'query'>>;
+  movieDiscover?: Resolver<ResolversTypes['MovieList'], ParentType, ContextType, RequireFields<QueryMovieDiscoverArgs, never>>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -249,10 +274,12 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type Resolvers<ContextType = any> = {
-  Movie: MovieResolvers<ContextType>;
-  MovieList: MovieListResolvers<ContextType>;
-  Query: QueryResolvers<ContextType>;
-  Upload: GraphQLScalarType;
+  Cast?: CastResolvers<ContextType>;
+  CastResult?: CastResultResolvers<ContextType>;
+  Movie?: MovieResolvers<ContextType>;
+  MovieList?: MovieListResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+  Upload?: GraphQLScalarType;
 };
 
 
@@ -262,7 +289,7 @@ export type Resolvers<ContextType = any> = {
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
 export type DirectiveResolvers<ContextType = any> = {
-  cacheControl: CacheControlDirectiveResolver<any, any, ContextType>;
+  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>;
 };
 
 

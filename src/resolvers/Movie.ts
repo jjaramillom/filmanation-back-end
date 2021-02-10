@@ -1,5 +1,7 @@
-import { QueryResolvers } from '../generated/graphql';
+import { QueryResolvers, Movie } from '../generated/graphql';
 import { Context } from '../createApolloServer';
+import { Movie as MovieApi } from '../dataSources/MovieDataSource';
+import { response } from 'express';
 
 export const movie: QueryResolvers<Context>['movie'] = (
   _,
@@ -18,6 +20,8 @@ export const movie: QueryResolvers<Context>['movie'] = (
     vote_average: 4,
     vote_count: 10,
     release_date: '',
+    overview: '',
+    cast: null,
   };
 };
 
@@ -26,7 +30,12 @@ export const movieSearch: QueryResolvers<Context>['movieSearch'] = async (
   { query, offset, limit },
   { dataSources: { movieApi } }
 ) => {
-  return await movieApi.searchMovies(query, offset ?? undefined, limit ?? undefined);
+  const { movies, moreMovies } = await movieApi.searchMovies(
+    query,
+    offset ?? undefined,
+    limit ?? undefined
+  );
+  return { moreMovies, movies: movies.map((m) => mapMovie(m)) };
 };
 
 export const movieDiscover: QueryResolvers<Context>['movieDiscover'] = async (
@@ -40,5 +49,10 @@ export const movieDiscover: QueryResolvers<Context>['movieDiscover'] = async (
     params.offset ?? undefined,
     params.limit ?? undefined
   );
-  return { movies, moreMovies };
+  return { moreMovies, movies: movies.map((m) => mapMovie(m)) };
 };
+
+const mapMovie = (movie: MovieApi): Movie => ({
+  ...movie,
+  cast: null,
+});

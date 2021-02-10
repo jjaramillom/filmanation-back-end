@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, IResolvers } from 'apollo-server-express';
 import { createDataSources, DataSources } from './dataSources';
 
 import typeDefs from './typeDefs';
@@ -11,7 +11,7 @@ export interface Context {
 export default () =>
   new ApolloServer({
     typeDefs,
-    resolvers,
+    resolvers: resolvers as IResolvers,
     dataSources: () => ({ ...createDataSources() }),
     context: ({ req, connection }) => {
       if (connection) {

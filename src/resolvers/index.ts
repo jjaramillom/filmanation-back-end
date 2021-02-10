@@ -1,3 +1,10 @@
-import Query from './Query';
+import { Resolvers } from '../generated/graphql';
+import query from './query';
+import nestedMovie from './nestedMovie';
 
-export default { Query };
+const resolvers: Resolvers = {
+  Movie: nestedMovie,
+  Query: query,
+};
+
+export default resolvers;

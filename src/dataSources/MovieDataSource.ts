@@ -1,5 +1,5 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
-import { Genre, SortBy, SortOrder, } from '../generated/graphql';
+import { Genre, SortBy, SortOrder } from '../generated/graphql';
 import { movies_per_page, api_key, base_url } from '../shared/movieDB';
 
 export type Movie = {
@@ -18,6 +18,15 @@ export type Movie = {
   backdrop_path: string;
   original_language: string;
   overview: string;
+};
+
+type Cast = {
+  name: string;
+  adult: boolean;
+  gender: number;
+  popularity: number;
+  profile_path: string;
+  character: string;
 };
 
 type FetchedMovies = {
@@ -121,6 +130,18 @@ export default class MovieDataSource extends RESTDataSource {
       moreMovies: resp.page < resp.total_pages,
       movies: this.mapGenres(paginatedMovies),
     };
+  }
+
+  /**
+   *
+   * @param query
+   * @param page
+   */
+  public async fetchCredits(id: string): Promise<Cast[]> {
+    const URL = `/movie/${id}/credits?api_key=${api_key}`;
+
+    const resp = await this.get(URL);
+    return resp.cast;
   }
 
   /**
